@@ -36,12 +36,14 @@ def show_elements(my_queue):
         time.sleep(0.5)
 
 if __name__ == '__main__':
-    queue_philo = queue.Queue()
     total_philo = int(input("Ingrese cuantos filósofos cenarán: "))
-    for i in range(total_philo):
-        new_philo = Philosopher(i+1)
+    queue_philo = queue.Queue(maxsize=total_philo)
+    i=1
+    while not queue_philo.full():
+        new_philo = Philosopher(i)
         queue_philo.put(new_philo)
+        i+=1
 
     for _ in range(4):
-        thread = threading.Thread(target=show_elements,args=(queue_philo,))
+        thread = threading.Thread(target=show_elements,args=([queue_philo]))
         thread.start()
