@@ -14,21 +14,24 @@ class TenedorFilosofo(threading.Thread):
         while True:
             print("Filosofo iniciando", self.filosofosNum)
             time.sleep(2)
-            self.tenedores[self.datoTemporal].acquire()
+            self.tenedores[self.filosofosNum].acquire()
+            time.sleep(1)
             print("Filosofo ", self.filosofosNum, "recoge tenedor del lado derecho")
             time.sleep(1)
 
+            self.tenedores[self.datoTemporal].acquire()
             print("Filosofo ", self.filosofosNum, "recoge tenedor del lado izquierdo")
-            self.tenedores[self.filosofosNum].acquire()
-            time.sleep(1)            
-            
+            time.sleep(0.5)
+
             print("Filosofo ", self.filosofosNum, "libre izquierdo")
             self.tenedores[self.datoTemporal].release()
+            time.sleep(0.5)
+
+            print("Filosofo ", self.filosofosNum, "libre derecho")
+            self.tenedores[self.filosofosNum].release()
             time.sleep(2)
 
-            self.tenedores[self.filosofosNum].release()
-            print("Filosofo ", self.filosofosNum, "libre derecho")
-            time.sleep(2)
+            
    
     def run(self):
         self.hilosFilosofos()
@@ -39,7 +42,7 @@ tenedorArray = [1,1,1,1,1]
 
 if __name__ == '__main__':
     for i in range(0,5):
-        tenedorArray[i] = threading.BoundedSemaphore(2)
+        tenedorArray[i] = threading.BoundedSemaphore(len(tenedorArray))
 
     for i in range(0,5):
         total = TenedorFilosofo(tenedorArray, i)
